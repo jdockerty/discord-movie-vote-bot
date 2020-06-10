@@ -4,6 +4,7 @@ import dotenv
 import asyncio
 import collections
 import operator
+import json
 
 dotenv.load_dotenv()
 
@@ -12,6 +13,7 @@ class MyClient(discord.Client):
 
     votes = {}
     already_voted = {}
+    vote_store = []
 
     async def on_ready(self):
         print('Logged on as {0}!'.format(self.user))
@@ -21,7 +23,7 @@ class MyClient(discord.Client):
         print(message.channel.id)
         if "!newvote" in message.content:
             # print(type(message.content))
-            self.new_vote(message)
+            await self.new_vote(message)
 
         elif "!vote" in message.content:
             await self.add_vote(message)
@@ -37,13 +39,24 @@ class MyClient(discord.Client):
     def get_message_content(self, message_string):
         return message_string.content.split(" ")[1:]
 
-    def new_vote(self, message):
-        movies = message.content.replace("!newvote ", "").split(", ")
+    async def new_vote(self, message):
 
-        for i, movie in enumerate(movies, start=1):
-            self.votes[i] = {"Movie Name" : movie, "Vote Count" : 0}
-
-        print(self.votes)
+        if "Admin" in [role.name for role in message.author.roles]:
+            movies = message.content.replace("!newvote ", "").split(", ")
+            for i, movie in enumerate(movies, start=1):
+                self.votes[i] = {"Movie Name" : movie, "Vote Count" : 0}
+            movie_string = ""
+            i = 1
+            for movie in self.votes.values():
+                print(movie)
+                movie_string += f"{i}: {movie['Movie Name']}\n"
+                i += 1
+            chan = self.get_channel(int(os.getenv("CHANNEL_ID")))
+            await chan.send(f"Movies to vote on: \n {movie_string}")
+            
+        else:
+            chan = self.get_channel(int(os.getenv("CHANNEL_ID")))
+            await chan.send("Only those with the role of 'Admin' can start votes.")
 
     async def add_vote(self, options):
         message_author = options.author.name
@@ -57,12 +70,15 @@ class MyClient(discord.Client):
         except:
 
             choices = self.get_message_content(options)
-            vote_store = {message_author : [val for val in choices]}
+            vote_hold = [val for val in choices]
+            
+            i = 3
             for value in choices:
-                self.votes[int(value)]["Vote Count"] += 1
+                self.votes[int(value)]["Vote Count"] += i
+                i -= 1
 
-            print(vote_store)
-            self.already_voted[message_author] = True
+
+            self.already_voted[message_author] = vote_hold
             print(self.already_voted)
         
         
@@ -73,19 +89,25 @@ class MyClient(discord.Client):
         message_author = new_options.author.name
         old_choices = None
         new_choices = self.get_message_content(new_options)
-
-        for voter in self.already_voted:
-            if voter[message_author]:
-                old_choices = voter[message_author]
-
+        # print(self.already_voted)
+        for voter in self.already_voted.keys():
+            print("VOTER", voter)
+            if voter == message_author:
+                print(voter, message_author)
+                old_choices = self.already_voted[message_author]
+        
+        i = 3
         for choice in old_choices:
-            self.votes[int(choice)]["Vote Count"] -= 1
+            self.votes[int(choice)]["Vote Count"] -= i
+            i -= 1
 
+        j = 3
         for choice in new_choices:
-            self.votes[int(choice)]["Vote Count"] += 1
-
+            self.votes[int(choice)]["Vote Count"] += j
+            j -= 1
+        chan = self.get_channel(int(os.getenv("CHANNEL_ID")))
+        await chan.send(message_author + " vote changed.")
         print("Vote changed: ", message_author)
-        print(self.votes)
         
 
 client = MyClient()
