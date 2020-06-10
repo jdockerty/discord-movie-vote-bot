@@ -4,7 +4,6 @@ import dotenv
 import asyncio
 import collections
 import operator
-import json
 
 dotenv.load_dotenv()
 
@@ -41,15 +40,15 @@ class MyClient(discord.Client):
             
 
         elif "!endvote" in message.content:
-
-            # Finds the largest item in the dictionary by sorting based on the vote count value.
-            winner_key = max(self.votes, key= (lambda key_val: self.votes[key_val]["Vote Count"]))
-            print(self.votes[winner_key]["Movie Name"])
-            # chan = self.get_channel(int(os.getenv("CHANNEL_ID")))
-            # await chan.send(f"{self.votes[winner_key]['Movie Name']} wins with {self.votes[winner_key]['Vote Count']} votes.")
-            await self.channel_message(f"{self.votes[winner_key]['Movie Name']} wins with {self.votes[winner_key]['Vote Count']} votes.")
-            self.already_voted.clear()
-            self.votes.clear()
+            if "Admin" in [role.name for role in message.author.roles]:
+                # Finds the largest item in the dictionary by sorting based on the vote count value.
+                winner_key = max(self.votes, key= (lambda key_val: self.votes[key_val]["Vote Count"]))
+                print(self.votes[winner_key]["Movie Name"])
+                # chan = self.get_channel(int(os.getenv("CHANNEL_ID")))
+                # await chan.send(f"{self.votes[winner_key]['Movie Name']} wins with {self.votes[winner_key]['Vote Count']} votes.")
+                await self.channel_message(f"{self.votes[winner_key]['Movie Name']} wins with {self.votes[winner_key]['Vote Count']} votes.")
+                self.already_voted.clear()
+                self.votes.clear()
 
     def get_message_content(self, message_string):
         return message_string.content.split(" ")[1:]
