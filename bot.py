@@ -13,10 +13,13 @@ class MyClient(discord.Client):
     already_voted = {}
     vote_store = []
 
+    # Confirm bot has joined the channel and is reading messages.
     async def on_ready(self):
         print('Logged on as {0}!'.format(self.user))
 
+    # Asynchronous function for reading messages awaiting the appropriate commands.
     async def on_message(self, message):
+
         if "!newvote" in message.content:
             await self.new_vote(message)
 
@@ -34,25 +37,25 @@ class MyClient(discord.Client):
                 movie_string += f"{i}: {movie['Movie Name']}. Votes: {movie['Vote Count']}\n"
                 i += 1
                 
-            # chan = self.get_channel(int(os.getenv("CHANNEL_ID")))
-            # await chan.send(movie_string)
             await self.channel_message(movie_string)
             
 
         elif "!endvote" in message.content:
+
             if "Admin" in [role.name for role in message.author.roles]:
+
                 # Finds the largest item in the dictionary by sorting based on the vote count value.
                 winner_key = max(self.votes, key= (lambda key_val: self.votes[key_val]["Vote Count"]))
-                print(self.votes[winner_key]["Movie Name"])
-                # chan = self.get_channel(int(os.getenv("CHANNEL_ID")))
-                # await chan.send(f"{self.votes[winner_key]['Movie Name']} wins with {self.votes[winner_key]['Vote Count']} votes.")
+
                 await self.channel_message(f"{self.votes[winner_key]['Movie Name']} wins with {self.votes[winner_key]['Vote Count']} votes.")
                 self.already_voted.clear()
                 self.votes.clear()
 
+    # Split vote choices, removing the command prefix and return resulting list.
     def get_message_content(self, message_string):
         return message_string.content.split(" ")[1:]
 
+    # Allows only 'Admin' roles to start votes, displays all vote possibilities to users in channel.
     async def new_vote(self, message):
 
         if "Admin" in [role.name for role in message.author.roles]:
@@ -65,27 +68,23 @@ class MyClient(discord.Client):
             for movie in self.votes.values():
                 movie_string += f"{i}: {movie['Movie Name']}\n"
                 i += 1
-            # chan = self.get_channel(int(os.getenv("CHANNEL_ID")))
-            # await chan.send(f"Use `!vote X Y Z` to place your votes\nChanges to votes are done by using `!changevote X Y Z`\n Movies to vote on: \n {movie_string}")
+            
             await self.channel_message(f"Use `!vote X Y Z` to place your votes\nChanges to votes are done by using `!changevote X Y Z`\n Movies to vote on: \n {movie_string}")
 
         else:
-            # chan = self.get_channel(int(os.getenv("CHANNEL_ID")))
-            # await chan.send("Only those with the role of 'Admin' can start votes.")
             await self.channel_message("Only those with the role of 'Admin' can start votes.")
 
-
+    # Checks whether there are duplicates within somebodies vote, this is not allowed.
     def check_duplicates(self, choices):
         return len(choices) != len(set(choices))
 
+    # Add a vote to the current movies available.
     async def add_vote(self, options):
         message_author = options.author.name
 
         try:
 
             if self.already_voted[message_author]:
-                # chan = self.get_channel(int(os.getenv("CHANNEL_ID")))
-                # await chan.send(message_author + " has already voted.")
                 await self.channel_message(message_author + " has already voted.")
         
         except:
@@ -111,9 +110,9 @@ class MyClient(discord.Client):
         
             else:
                 await self.channel_message("Test message.")
-                # chan = self.get_channel(int(os.getenv("CHANNEL_ID")))
-                # await chan.send("You can only cast 3 votes. These should not contain duplicates!")
 
+
+    # Allow a user to change their vote by reading the stored vote generated previously, removing their old vote and reapplying the new one.
     async def change_vote(self, new_options):
         message_author = new_options.author.name
         old_choices = None
@@ -134,11 +133,11 @@ class MyClient(discord.Client):
             self.votes[int(choice)]["Vote Count"] += j
             j -= 1
 
-        # chan = self.get_channel(int(os.getenv("CHANNEL_ID")))
-        # await chan.send(message_author + " vote changed.")
-        await self.channel_message(message_author + " vote changed.")
-        print("Vote changed: ", message_author)
 
+        await self.channel_message(message_author + " vote changed.")
+        #print("Vote changed: ", message_author)
+
+    # Wrapper function for sending a message into the relevant channel, this is always the same designated channel e.g. #bot-spam
     async def channel_message(self, message):
         chan = self.get_channel(int(os.getenv("CHANNEL_ID")))
         await chan.send(message)
