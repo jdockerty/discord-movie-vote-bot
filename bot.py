@@ -69,12 +69,12 @@ class MyClient(discord.Client):
         
 
 
-    def change_vote(self, new_options):
+    async def change_vote(self, new_options):
         message_author = new_options.author.name
         old_choices = None
         new_choices = self.get_message_content(new_options)
 
-        for voter in self.voted_list:
+        for voter in self.already_voted:
             if voter[message_author]:
                 old_choices = voter[message_author]
 
