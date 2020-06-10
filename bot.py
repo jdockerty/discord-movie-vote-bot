@@ -34,7 +34,7 @@ class MyClient(discord.Client):
             i = 1
             for movie in self.votes.values():
 
-                movie_string += f"{i}: {movie['Movie Name']}. Votes: {movie['Vote Count']}\n"
+                movie_string += f"{i}: {movie['Movie Name']}. Points: {movie['Vote Count']}\n"
                 i += 1
                 
             await self.channel_message(movie_string)
@@ -47,7 +47,7 @@ class MyClient(discord.Client):
                 # Finds the largest item in the dictionary by sorting based on the vote count value.
                 winner_key = max(self.votes, key= (lambda key_val: self.votes[key_val]["Vote Count"]))
 
-                await self.channel_message(f"{self.votes[winner_key]['Movie Name']} wins with {self.votes[winner_key]['Vote Count']} votes.")
+                await self.channel_message(f"{self.votes[winner_key]['Movie Name']} wins with {self.votes[winner_key]['Vote Count']} points.")
                 self.already_voted.clear()
                 self.votes.clear()
 
