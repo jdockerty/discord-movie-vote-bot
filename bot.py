@@ -24,10 +24,10 @@ class MyClient(discord.Client):
             self.new_vote(message)
 
         elif "!vote" in message.content:
-            self.add_vote(message)
+            await self.add_vote(message)
 
         elif "!changevote" in message.content:
-            self.change_vote(message)
+            await self.change_vote(message)
 
         elif "!endvote" in message.content:
             # Finds the largest item in the dictionary by sorting based on the vote count value.
@@ -48,12 +48,13 @@ class MyClient(discord.Client):
     async def add_vote(self, options):
         message_author = options.author.name
 
-        for voter in self.voted_list:
-            if voter[message_author]:
-                print(message_author + " has already voted.")
-                await options.author.send("voted")
-
-                # CHANGED VOTED LIST TO DICT FOR FAST ACCESS.
+        if len(self.voted_list) > 1:
+            for voter in self.voted_list:
+                if voter[message_author]:
+                    # await self.send_message_to_channel(message_author + " has already voted")
+                    chan = self.get_channel(int(os.getenv("CHANNEL_ID")))
+                    await chan.send(message_author + " has already voted.")
+                    # CHANGED VOTED LIST TO DICT FOR FAST ACCESS.
         
         else:
             choices = self.get_message_content(options)
@@ -66,6 +67,8 @@ class MyClient(discord.Client):
             self.voted_list.append(vote_store)
         
         
+        
+
 
     def change_vote(self, new_options):
         message_author = new_options.author.name
