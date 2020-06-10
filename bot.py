@@ -11,7 +11,7 @@ dotenv.load_dotenv()
 class MyClient(discord.Client):
 
     votes = {}
-    voted_list = []
+    already_voted = {}
 
     async def on_ready(self):
         print('Logged on as {0}!'.format(self.user))
@@ -48,23 +48,22 @@ class MyClient(discord.Client):
     async def add_vote(self, options):
         message_author = options.author.name
 
-        if len(self.voted_list) > 1:
-            for voter in self.voted_list:
-                if voter[message_author]:
-                    # await self.send_message_to_channel(message_author + " has already voted")
-                    chan = self.get_channel(int(os.getenv("CHANNEL_ID")))
-                    await chan.send(message_author + " has already voted.")
-                    # CHANGED VOTED LIST TO DICT FOR FAST ACCESS.
+        try:
+
+            if self.already_voted[message_author]:
+                chan = self.get_channel(int(os.getenv("CHANNEL_ID")))
+                await chan.send(message_author + " has already voted.")
         
-        else:
+        except:
+
             choices = self.get_message_content(options)
             vote_store = {message_author : [val for val in choices]}
             for value in choices:
                 self.votes[int(value)]["Vote Count"] += 1
 
-            # print(message_author + " vote added")
             print(vote_store)
-            self.voted_list.append(vote_store)
+            self.already_voted[message_author] = True
+            print(self.already_voted)
         
         
         
