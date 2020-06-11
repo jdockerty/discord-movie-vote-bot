@@ -22,3 +22,7 @@ Within the channels the commands are:
 * `!changevote X Y Z` someone can change their vote if it has already been cast, reusing `!vote` would stop them duplicating the vote.
 * `!standings` will display the current points for each movie.
 * `!endvote` will end the vote casting and write the movie with the highest number of points into the channel.
+
+## Deployment
+
+A simple deployment is achieved through a t2.micro Ubuntu instance on AWS. The Python file is run via tmux first, so that the process does not stop upon closing the SSH session. There is an argument for running it as a daemon, but this is not too important.
