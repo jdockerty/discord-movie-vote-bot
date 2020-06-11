@@ -85,6 +85,7 @@ class MyClient(discord.Client):
         try:
 
             if self.already_voted[message_author]:
+                print(message_author + " attempted to vote twice using !vote.")
                 await self.channel_message(message_author + " has already voted.")
         
         except:
@@ -106,10 +107,10 @@ class MyClient(discord.Client):
 
 
                 self.already_voted[message_author] = vote_hold
-                # print(self.already_voted)
+                print(self.already_voted)
         
             else:
-                await self.channel_message("Test message.")
+                await self.channel_message("You cannot vote for more than 3 things at time.")
 
 
     # Allow a user to change their vote by reading the stored vote generated previously, removing their old vote and reapplying the new one.
@@ -135,7 +136,7 @@ class MyClient(discord.Client):
 
 
         await self.channel_message(message_author + " vote changed.")
-        #print("Vote changed: ", message_author)
+        print("Vote changed: ", message_author)
 
     # Wrapper function for sending a message into the relevant channel, this is always the same designated channel e.g. #bot-spam
     async def channel_message(self, message):
