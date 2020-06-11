@@ -1,6 +1,6 @@
 ## Overview
 
-Simple Discord bot for counting the number of votes in a given list of movies for the movie night on the Discord.
+Simple Discord bot for counting the number of votes in a given list of movies for the movie night on Discord.
 
 ## Install
 
