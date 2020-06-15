@@ -147,16 +147,20 @@ class MyClient(discord.Client):
         await chan.send(message)
 
     async def standings_display(self):
-        movie_string = ""
-        i = 1
+        # movie_string = ""
+        # i = 1
+        sorted_by_vote_count = { k: v for k, v in sorted(self.votes.items(), key=(lambda x: x[1]["Vote Count"]), reverse=True) }
+        msg = ""
+        for key in sorted_by_vote_count:
+            msg += f"**{key}**: {sorted_by_vote_count[key]['Movie Name']}. Points: {sorted_by_vote_count[key]['Vote Count']}\n"
 
-        for movie in self.votes.values():
+        # for movie in self.votes.values():
 
-            movie_string += f"{i}: {movie['Movie Name']}. Points: {movie['Vote Count']}\n"
-            i += 1
+        #     movie_string += f"{i}: {movie['Movie Name']}. Points: {movie['Vote Count']}\n"
+        #     i += 1
         # print("Vote display:\n", movie_string)
 
-        await self.channel_message(movie_string)
+        await self.channel_message(msg)
 
 
 client = MyClient()
