@@ -29,16 +29,9 @@ class MyClient(discord.Client):
         elif message.content.startswith("!changevote"):
             await self.change_vote(message)
 
-        elif message.content.startswith("!standings"):
-            movie_string = ""
-            i = 1
-            for movie in self.votes.values():
-
-                movie_string += f"{i}: {movie['Movie Name']}. Points: {movie['Vote Count']}\n"
-                i += 1
-                
-            await self.channel_message(movie_string)
-            
+        # Standings no longer required, display upon every vote or changed vote.
+        # elif message.content.startswith("!standings"):
+        #     await self.standings_display()
 
         elif "!endvote" in message.content:
 
@@ -108,6 +101,7 @@ class MyClient(discord.Client):
 
                 self.already_voted[message_author] = vote_hold
                 print(self.already_voted)
+                await self.standings_display()
         
             else:
                 await self.channel_message("You cannot vote for more than 3 things at time.")
@@ -118,6 +112,7 @@ class MyClient(discord.Client):
         message_author = new_options.author.name
         old_choices = None
         new_choices = self.get_message_content(new_options)
+
         if len(new_choices) > 3:
             await self.channel_message("You cannot vote for more than 3 movies.")
             return
@@ -129,7 +124,6 @@ class MyClient(discord.Client):
         for voter in self.already_voted.keys():
    
             if voter == message_author:
-                print(voter, message_author)
                 old_choices = self.already_voted[message_author]
         
         i = 3
@@ -144,12 +138,26 @@ class MyClient(discord.Client):
 
 
         await self.channel_message(message_author + " vote changed.")
+        await self.standings_display()
         print("Vote changed: ", message_author)
 
     # Wrapper function for sending a message into the relevant channel, this is always the same designated channel e.g. #bot-spam
     async def channel_message(self, message):
         chan = self.get_channel(int(os.getenv("CHANNEL_ID")))
         await chan.send(message)
+
+    async def standings_display(self):
+        movie_string = ""
+        i = 1
+
+        for movie in self.votes.values():
+
+            movie_string += f"{i}: {movie['Movie Name']}. Points: {movie['Vote Count']}\n"
+            i += 1
+        # print("Vote display:\n", movie_string)
+
+        await self.channel_message(movie_string)
+
 
 client = MyClient()
 client.run(os.getenv("API_KEY"))
