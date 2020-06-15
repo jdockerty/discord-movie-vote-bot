@@ -118,6 +118,14 @@ class MyClient(discord.Client):
         message_author = new_options.author.name
         old_choices = None
         new_choices = self.get_message_content(new_options)
+        if len(new_choices) > 3:
+            await self.channel_message("You cannot vote for more than 3 movies.")
+            return
+
+        if self.check_duplicates(new_choices):
+            await self.channel_message("You cannot vote for the same movie multiple times in the same vote.")
+            return
+
         for voter in self.already_voted.keys():
    
             if voter == message_author:
