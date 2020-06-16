@@ -84,7 +84,10 @@ class MyClient(discord.Client):
         except:
 
             choices = self.get_message_content(options)
-    
+            
+            if self.negtaive_votes(choices):
+                await self.channel_message("You cannot vote with a negative number.")
+
             if len(choices) <= 3:
 
                 if self.check_duplicates(choices):
@@ -112,6 +115,9 @@ class MyClient(discord.Client):
         message_author = new_options.author.name
         old_choices = None
         new_choices = self.get_message_content(new_options)
+
+        if self.negtaive_votes(new_choices):
+            await self.channel_message("You cannot vote with a negative number.")
 
         if len(new_choices) > 3:
             await self.channel_message("You cannot vote for more than 3 movies.")
@@ -146,6 +152,7 @@ class MyClient(discord.Client):
         chan = self.get_channel(int(os.getenv("CHANNEL_ID")))
         await chan.send(message)
 
+    # Displays the standings after each vote or change vote, this shows votes in descending order.
     async def standings_display(self):
         # movie_string = ""
         # i = 1
@@ -162,6 +169,14 @@ class MyClient(discord.Client):
 
         await self.channel_message(msg)
 
+    # Helper function to ensure that there are no negative votes within the choices.
+    def negtaive_votes(self, movie_votes):
+
+        for vote in movie_votes:
+            if vote < 0:
+                return True
+
+        return False
 
 client = MyClient()
 client.run(os.getenv("API_KEY"))
