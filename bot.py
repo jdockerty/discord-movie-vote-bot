@@ -65,7 +65,7 @@ class MyClient(discord.Client):
             await self.channel_message(f"Use `!vote X Y Z` to place your votes\nChanges to votes are done by using `!changevote X Y Z`\n Movies to vote on: \n {movie_string}")
 
         else:
-            await self.channel_message("Only those with the role of 'Admin' can start votes.")
+            await self.channel_message(f"{message.author.mention}, only those with the role of 'Admin' can start votes.")
 
     # Checks whether there are duplicates within somebodies vote, this is not allowed.
     def check_duplicates(self, choices):
