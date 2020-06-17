@@ -40,8 +40,6 @@ cd /home/ubuntu
 git clone https://github.com/jdockerty/DiscordMovieVoteBot.git
 cd DiscordMovieVoteBot
 python3 -m venv myenv
-source /myenv/bin/activate
-pip install -r requirements
 EOL
 }
 

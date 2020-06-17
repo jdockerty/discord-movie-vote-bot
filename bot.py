@@ -173,7 +173,7 @@ class MyClient(discord.Client):
     def negtaive_votes(self, movie_votes):
 
         for vote in movie_votes:
-            if vote < 0:
+            if int(vote) < 0:
                 return True
 
         return False
