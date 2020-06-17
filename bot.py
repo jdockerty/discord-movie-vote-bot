@@ -79,19 +79,19 @@ class MyClient(discord.Client):
 
             if self.already_voted[message_author]:
                 print(message_author + " attempted to vote twice using !vote.")
-                await self.channel_message(message_author + " has already voted.")
+                await self.channel_message(f"{message.author.mention}, you have already voted.")
         
         except:
 
             choices = self.get_message_content(options)
             
             if self.negtaive_votes(choices):
-                await self.channel_message("You cannot vote with a negative number.")
+                await self.channel_message(f"{message.author.mention}, you cannot vote with a negative number.")
 
             if len(choices) <= 3:
 
                 if self.check_duplicates(choices):
-                    await self.channel_message("There should be no duplicates in your vote.")
+                    await self.channel_message(f"{message.author.mention}, there should be no duplicates in your vote.")
                     return
 
                 vote_hold = [val for val in choices]
@@ -107,7 +107,7 @@ class MyClient(discord.Client):
                 await self.standings_display()
         
             else:
-                await self.channel_message("You cannot vote for more than 3 things at time.")
+                await self.channel_message(f"{message.author.mention}, you cannot vote for more than 3 things at time.")
 
 
     # Allow a user to change their vote by reading the stored vote generated previously, removing their old vote and reapplying the new one.
@@ -117,14 +117,14 @@ class MyClient(discord.Client):
         new_choices = self.get_message_content(new_options)
 
         if self.negtaive_votes(new_choices):
-            await self.channel_message("You cannot vote with a negative number.")
+            await self.channel_message(f"{message.author.mention}, you cannot vote with a negative number.")
 
         if len(new_choices) > 3:
-            await self.channel_message("You cannot vote for more than 3 movies.")
+            await self.channel_message(f"{message.author.mention}, you cannot vote for more than 3 movies.")
             return
 
         if self.check_duplicates(new_choices):
-            await self.channel_message("You cannot vote for the same movie multiple times in the same vote.")
+            await self.channel_message(f"{message.author.mention}, you cannot vote for the same movie multiple times in the same vote.")
             return
 
         for voter in self.already_voted.keys():
@@ -143,11 +143,11 @@ class MyClient(discord.Client):
             j -= 1
 
 
-        await self.channel_message(message_author + " vote changed.")
+        await self.channel_message(f"{message.author.mention} vote changed.")
         await self.standings_display()
         print("Vote changed: ", message_author)
 
-    # Wrapper function for sending a message into the relevant channel, this is always the same designated channel e.g. #bot-spam
+    # Wrapper function for sending a message into the relevant channel, this is always the same designated channel e.g. #movie-voting
     async def channel_message(self, message):
         chan = self.get_channel(int(os.getenv("CHANNEL_ID")))
         await chan.send(message)
