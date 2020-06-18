@@ -38,6 +38,7 @@ sudo apt update -y
 sudo apt-get install python3-venv -y
 cd /home/ubuntu
 git clone https://github.com/jdockerty/DiscordMovieVoteBot.git
+sudo chown --recursive ubuntu:ubuntu DiscordMovieBot/
 cd DiscordMovieVoteBot
 python3 -m venv myenv
 EOL
