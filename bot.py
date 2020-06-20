@@ -72,18 +72,18 @@ class MyClient(discord.Client):
         return len(choices) != len(set(choices))
 
     # Add a vote to the current movies available.
-    async def add_vote(self, options):
-        message_author = options.author.name
+    async def add_vote(self, message):
+        message_author = message.author.name
 
         try:
 
             if self.already_voted[message_author]:
                 print(message_author + " attempted to vote twice using !vote.")
-                await self.channel_message(f"{message.author.mention}, you have already voted.")
+                await self.channel_message(f"{message.author.mention}, you have already voted. Use `!changevote`.")
         
         except:
 
-            choices = self.get_message_content(options)
+            choices = self.get_message_content(message)
             
             if self.negtaive_votes(choices):
                 await self.channel_message(f"{message.author.mention}, you cannot vote with a negative number.")
@@ -111,10 +111,10 @@ class MyClient(discord.Client):
 
 
     # Allow a user to change their vote by reading the stored vote generated previously, removing their old vote and reapplying the new one.
-    async def change_vote(self, new_options):
-        message_author = new_options.author.name
+    async def change_vote(self, message):
+        message_author = message.author.name
         old_choices = None
-        new_choices = self.get_message_content(new_options)
+        new_choices = self.get_message_content(message)
 
         if self.negtaive_votes(new_choices):
             await self.channel_message(f"{message.author.mention}, you cannot vote with a negative number.")
