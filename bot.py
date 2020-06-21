@@ -94,7 +94,6 @@ class MyClient(discord.Client):
                     await self.channel_message(f"{message.author.mention}, there should be no duplicates in your vote.")
                     return
 
-                vote_hold = [val for val in choices]
                 i = 3
 
                 for value in choices:
@@ -102,7 +101,7 @@ class MyClient(discord.Client):
                     i -= 1
 
 
-                self.already_voted[message_author] = vote_hold
+                self.store_choices(choices, message_author)
                 print(self.already_voted)
                 await self.standings_display()
         
@@ -115,7 +114,8 @@ class MyClient(discord.Client):
         message_author = message.author.name
         old_choices = None
         new_choices = self.get_message_content(message)
-
+    
+    
         if self.negtaive_votes(new_choices):
             await self.channel_message(f"{message.author.mention}, you cannot vote with a negative number.")
 
@@ -132,6 +132,11 @@ class MyClient(discord.Client):
             if voter == message_author:
                 old_choices = self.already_voted[message_author]
         
+        if old_choices == new_choices:
+            print("Same votes to change")
+            await self.channel_message(f"{message.author.mention}, you cannot change your vote to the same vote.")
+            return
+
         i = 3
         for choice in old_choices:
             self.votes[int(choice)]["Vote Count"] -= i
@@ -142,7 +147,8 @@ class MyClient(discord.Client):
             self.votes[int(choice)]["Vote Count"] += j
             j -= 1
 
-
+        self.store_choices(new_choices, message_author)
+        
         await self.channel_message(f"{message.author.mention} vote changed.")
         await self.standings_display()
         print("Vote changed: ", message_author)
@@ -154,18 +160,12 @@ class MyClient(discord.Client):
 
     # Displays the standings after each vote or change vote, this shows votes in descending order.
     async def standings_display(self):
-        # movie_string = ""
-        # i = 1
+
         sorted_by_vote_count = { k: v for k, v in sorted(self.votes.items(), key=(lambda x: x[1]["Vote Count"]), reverse=True) }
         msg = ""
         for key in sorted_by_vote_count:
             msg += f"**{key}**: {sorted_by_vote_count[key]['Movie Name']}. Points: {sorted_by_vote_count[key]['Vote Count']}\n"
 
-        # for movie in self.votes.values():
-
-        #     movie_string += f"{i}: {movie['Movie Name']}. Points: {movie['Vote Count']}\n"
-        #     i += 1
-        # print("Vote display:\n", movie_string)
 
         await self.channel_message(msg)
 
@@ -177,6 +177,12 @@ class MyClient(discord.Client):
                 return True
 
         return False
+
+    def store_choices(self, choices, message_author):
+
+        vote_hold = [val for val in choices]
+        self.already_voted[message_author] = vote_hold
+        return
 
 client = MyClient()
 client.run(os.getenv("API_KEY"))
