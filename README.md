@@ -25,4 +25,4 @@ Within the channels the commands are:
 
 ## Deployment
 
-A simple deployment is achieved through a t2.micro Ubuntu instance on AWS. The Python file is run via tmux first, so that the process does not stop upon closing the SSH session. There is an argument for running it as a daemon, but this is not too important.
+A simple automated deployment is achieved through a t2.micro Ubuntu instance on AWS. The Python file requires the a `.env` file with the relevant `API_KEY` from the Discord Developer Portal to run the bot, this is stored in S3. The role to read objects is assigned to the instance upon creation in Terraform with the appropriate `user_data` script being executed to download the latest version of the GitHub repo and download the dependencies from the `requirements.txt` file, the bot is then run afterwards.
