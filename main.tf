@@ -23,7 +23,8 @@ resource "aws_instance" "ubuntu" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"
   
-
+  iam_instance_profile = data.aws_iam_role.ec2_read_s3_role.name
+  
   key_name = "BusinessInfra"
 
   vpc_security_group_ids = [aws_security_group.discord_bot_sg_terraform.id]
@@ -34,16 +35,21 @@ resource "aws_instance" "ubuntu" {
 
   user_data = <<EOL
 #!/bin/bash
-sudo apt update -y
-sudo apt-get install python3-venv -y
+apt update -y
+apt-get install python3-pip -y
+apt-get install awscli -y
 cd /home/ubuntu
-git clone https://github.com/jdockerty/DiscordMovieVoteBot.git
-sudo chown --recursive ubuntu:ubuntu DiscordMovieVoteBot/
-cd DiscordMovieVoteBot
-python3 -m venv myenv
+git clone https://github.com/jdockerty/DiscordMovieVoteBot.git && cd DiscordMovieVoteBot
+aws s3 cp s3://movie-vote-bot-bucket/.env .
+pip3 install -r requirements.txt
+python3 bot.py
 EOL
 }
 
+# apt-get install python3-venv -y
+# python3 -m venv myenv
+# source myenv/bin/activate
+# chown --recursive ubuntu:ubuntu ../DiscordMovieVoteBot/
 
 resource "aws_security_group" "discord_bot_sg_terraform" {
 
@@ -84,4 +90,8 @@ resource "aws_security_group" "discord_bot_sg_terraform" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   
+}
+
+data "aws_iam_role" "ec2_read_s3_role" {
+  name = "ec2_read_s3"
 }
