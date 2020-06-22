@@ -39,17 +39,13 @@ apt update -y
 apt-get install python3-pip -y
 apt-get install awscli -y
 cd /home/ubuntu
-git clone https://github.com/jdockerty/DiscordMovieVoteBot.git && cd DiscordMovieVoteBot
+git clone https://github.com/jdockerty/DiscordMovieVoteBot.git
+cd DiscordMovieVoteBot
 aws s3 cp s3://movie-vote-bot-bucket/.env .
 pip3 install -r requirements.txt
 python3 bot.py
 EOL
 }
-
-# apt-get install python3-venv -y
-# python3 -m venv myenv
-# source myenv/bin/activate
-# chown --recursive ubuntu:ubuntu ../DiscordMovieVoteBot/
 
 resource "aws_security_group" "discord_bot_sg_terraform" {
 
