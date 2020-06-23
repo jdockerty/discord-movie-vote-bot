@@ -6,6 +6,7 @@ import collections
 import operator
 
 dotenv.load_dotenv()
+channel_id = int(os.getenv("CHANNEL_ID"))
 
 class MyClient(discord.Client):
 
@@ -20,30 +21,28 @@ class MyClient(discord.Client):
     # Asynchronous function for reading messages awaiting the appropriate commands.
     async def on_message(self, message):
 
-        if "!newvote" in message.content:
-            await self.new_vote(message)
+        if message.channel.id == channel_id:
+            if message.content.startswith("!newvote"):
+                await self.new_vote(message)
 
-        elif message.content.startswith("!vote"):
-            await self.add_vote(message)
+            elif message.content.startswith("!vote"):
+                await self.add_vote(message)
 
-        elif message.content.startswith("!changevote"):
-            await self.change_vote(message)
+            elif message.content.startswith("!changevote"):
+                await self.change_vote(message)
 
-        # Standings no longer required, display upon every vote or changed vote.
-        # elif message.content.startswith("!standings"):
-        #     await self.standings_display()
 
-        elif "!endvote" in message.content:
+            elif "!endvote" in message.content:
 
-            if "Admin" in [role.name for role in message.author.roles]:
+                if "Admin" in [role.name for role in message.author.roles]:
 
-                # Finds the largest item in the dictionary by sorting based on the vote count value.
-                winner_key = max(self.votes, key= (lambda key_val: self.votes[key_val]["Vote Count"]))
+                    # Finds the largest item in the dictionary by sorting based on the vote count value.
+                    winner_key = max(self.votes, key= (lambda key_val: self.votes[key_val]["Vote Count"]))
 
-                await self.channel_message(f"{self.votes[winner_key]['Movie Name']} wins with {self.votes[winner_key]['Vote Count']} points.")
-                self.already_voted.clear()
-                self.votes.clear()
-
+                    await self.channel_message(f"{self.votes[winner_key]['Movie Name']} wins with {self.votes[winner_key]['Vote Count']} points.")
+                    self.already_voted.clear()
+                    self.votes.clear()
+                    
     # Split vote choices, removing the command prefix and return resulting list.
     def get_message_content(self, message_string):
         return message_string.content.split(" ")[1:]
@@ -155,7 +154,7 @@ class MyClient(discord.Client):
 
     # Wrapper function for sending a message into the relevant channel, this is always the same designated channel e.g. #movie-voting
     async def channel_message(self, message):
-        chan = self.get_channel(int(os.getenv("CHANNEL_ID")))
+        chan = self.get_channel(channel_id)
         await chan.send(message)
 
     # Displays the standings after each vote or change vote, this shows votes in descending order.
