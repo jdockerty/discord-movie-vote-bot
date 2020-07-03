@@ -39,8 +39,8 @@ apt update -y
 apt-get install python3-pip -y
 apt-get install awscli -y
 cd /home/ubuntu
-git clone https://github.com/jdockerty/DiscordMovieVoteBot.git
-cd DiscordMovieVoteBot
+git clone https://github.com/jdockerty/discord-movie-vote-bot.git
+cd discord-movie-vote-bot
 aws s3 cp s3://movie-vote-bot-bucket/.env .
 pip3 install -r requirements.txt
 python3 bot.py
