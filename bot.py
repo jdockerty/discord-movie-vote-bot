@@ -84,7 +84,7 @@ class MyClient(discord.Client):
 
             choices = self.get_message_content(message)
             
-            if self.negtaive_votes(choices):
+            if self.zero_or_negative_votes(choices):
                 await self.channel_message(f"{message.author.mention}, you cannot vote with a negative number.")
 
             if len(choices) <= 3:
@@ -115,7 +115,7 @@ class MyClient(discord.Client):
         new_choices = self.get_message_content(message)
     
     
-        if self.negtaive_votes(new_choices):
+        if self.zero_or_negative_votes(new_choices):
             await self.channel_message(f"{message.author.mention}, you cannot vote with a negative number.")
 
         if len(new_choices) > 3:
@@ -168,11 +168,11 @@ class MyClient(discord.Client):
 
         await self.channel_message(msg)
 
-    # Helper function to ensure that there are no negative votes within the choices.
-    def negtaive_votes(self, movie_votes):
+    # Helper function to ensure that there are no negative or 0 votes within the choices.
+    def zero_or_negative_votes(self, movie_votes):
 
         for vote in movie_votes:
-            if int(vote) < 0:
+            if int(vote) =< 0:
                 return True
 
         return False
