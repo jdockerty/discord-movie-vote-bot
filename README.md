@@ -15,12 +15,11 @@ pip install -r requirements.txt
 
 Requires an API key from Discord Developer Portal for usage inside of the `os.getenv['API_KEY']` and a channel ID for the appropriate channel messages are to be placed into, this is retrieved via `os.getenv['CHANNEL_ID']` as part of running the client.
 
-Within the channels the commands are:
+Within the designated channel the commands are:
 
 * `!newvote movie 1, movie 2, movie 3, ...` starts a new vote, only those with the role of 'Admin' can begin a vote.
 * `!vote X Y Z` allows people to vote after a new vote has begun, the values correspond to the numerical value within list that is presented by the bot. Votes are weighted in order: the first vote is worth 3 points, the second is worth 2, and the last vote is worth 1.
 * `!changevote X Y Z` someone can change their vote if it has already been cast, reusing `!vote` would stop them duplicating the vote.
-* `!standings` will display the current points for each movie.
 * `!endvote` will end the vote casting and write the movie with the highest number of points into the channel.
 
 ## Deployment
