@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  bot:
+    build:
+      context: .
+      dockerfile: .docker/bot.yml
+    ports:
+      - "9091"
+      
+  prometheus:
+    build:
+      context: .
+      dockerfile: .docker/docker.prometheus.yml
+    volumes:
+      - ".docker/prometheus.yml:/etc/prometheus/prometheus.yml"
+    ports:
+      - "9090"
+
