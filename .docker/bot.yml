@@ -4,6 +4,9 @@ WORKDIR /app
 
 COPY . .
 
+ARG environment
+ENV bot_environment="${environment}"
+
 RUN apk add --update alpine-sdk && \
     pip install -r requirements.txt
 

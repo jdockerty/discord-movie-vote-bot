@@ -5,9 +5,12 @@ services:
     build:
       context: .
       dockerfile: .docker/bot.yml
+      args:
+        - environment
+      
     ports:
       - "9091"
-      
+
   prometheus:
     image: prom/prometheus
     volumes:
