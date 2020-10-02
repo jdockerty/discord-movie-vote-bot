@@ -9,9 +9,7 @@ services:
       - "9091"
       
   prometheus:
-    build:
-      context: .
-      dockerfile: .docker/docker.prometheus.yml
+    image: prom/prometheus
     volumes:
       - ".docker/prometheus.yml:/etc/prometheus/prometheus.yml"
     ports:
