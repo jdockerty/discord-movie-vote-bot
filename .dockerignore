@@ -2,5 +2,5 @@ env/
 .docker/
 .gitignore
 .dockerignore
-*.yml
 *.md
+docker-compose.yml
