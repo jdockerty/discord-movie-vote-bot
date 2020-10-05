@@ -46,3 +46,10 @@ services:
     container_name: redis
     ports:
     - 6379:6379
+
+  # Grafana service
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+    - 3000:3000
