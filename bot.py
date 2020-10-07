@@ -14,7 +14,7 @@ def load_config():
             info = yaml.safe_load(conf)
  
             return {
-                "key": info[bot_env]["API_KEY"],
+                "key": info["API_KEY"],
                 "channel": info[bot_env]["CHANNEL_ID"]
             }
         except yaml.YAMLError as exc:
