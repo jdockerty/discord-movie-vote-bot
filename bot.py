@@ -4,9 +4,22 @@ import dotenv
 import asyncio
 import collections
 import operator
+import yaml
 
-dotenv.load_dotenv()
-channel_id = int(os.getenv("CHANNEL_ID"))
+
+def load_config():
+    bot_env = os.getenv("bot_environment")
+    with open("config.yaml", 'r') as conf:
+        try:
+            info = yaml.safe_load(conf)
+ 
+            return {
+                "key": info[bot_env]["API_KEY"],
+                "channel": info[bot_env]["CHANNEL_ID"]
+            }
+        except yaml.YAMLError as exc:
+            print("Error loading YAML:", exc)
+
 
 class MyClient(discord.Client):
 
@@ -21,7 +34,8 @@ class MyClient(discord.Client):
     # Asynchronous function for reading messages awaiting the appropriate commands.
     async def on_message(self, message):
 
-        if message.channel.id == channel_id:
+        if message.channel.id == config["channel"]:
+
             if message.content.startswith("!newvote"):
                 await self.new_vote(message)
 
@@ -93,6 +107,10 @@ class MyClient(discord.Client):
                     await self.channel_message(f"{message.author.mention}, there should be no duplicates in your vote.")
                     return
 
+                elif self.check_key_error(choices):
+                    await self.channel_message(f"{message.author.mention}, you're a cunt :) .")
+                    return
+
                 i = 3
 
                 for value in choices:
@@ -136,6 +154,10 @@ class MyClient(discord.Client):
             await self.channel_message(f"{message.author.mention}, you cannot change your vote to the same vote.")
             return
 
+        elif self.check_key_error(new_choices):
+            await self.channel_message(f"{message.author.mention}, you're a cunt :) .")
+            return
+            
         i = 3
         for choice in old_choices:
             self.votes[int(choice)]["Vote Count"] -= i
@@ -154,7 +176,7 @@ class MyClient(discord.Client):
 
     # Wrapper function for sending a message into the relevant channel, this is always the same designated channel e.g. #movie-voting
     async def channel_message(self, message):
-        chan = self.get_channel(channel_id)
+        chan = self.get_channel(config["channel"])
         await chan.send(message)
 
     # Displays the standings after each vote or change vote, this shows votes in descending order.
@@ -177,11 +199,22 @@ class MyClient(discord.Client):
 
         return False
 
+    def check_key_error(self, movie_votes):
+
+        try:
+            for vote in movie_votes:
+                self.votes[int(vote)]
+            return False
+
+        except KeyError:
+            return True
+
     def store_choices(self, choices, message_author):
 
         vote_hold = [val for val in choices]
         self.already_voted[message_author] = vote_hold
         return
 
+config = load_config()
 client = MyClient()
-client.run(os.getenv("API_KEY"))
+client.run(config["key"])

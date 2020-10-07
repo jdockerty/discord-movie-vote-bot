@@ -1,0 +1,8 @@
+# Ignore environment variables.
+.env
+
+# Ignore environment folder
+env/
+
+# Ignore config file.
+config.yaml

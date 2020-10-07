@@ -1,0 +1,13 @@
+FROM python:3.9.0rc2-alpine3.12
+
+WORKDIR /app
+
+COPY . .
+
+ARG environment
+ENV bot_environment="${environment}"
+
+RUN apk add --update alpine-sdk && \
+    pip install -r requirements.txt
+
+ENTRYPOINT [ "/usr/local/bin/python", "bot.py" ]
