@@ -9,8 +9,10 @@ test:
   script:
     - apt-get update -qy
     - pip install awscli
+    - aws s3 cp s3://movie-vote-bot-bucket/config.yaml .
     - pip install -r requirements.txt
     - export bot_environment=testing
+    - echo $TESTER_BOT_TOKEN
     - python bot_test.py --channel 720200786167988297 --run all 719974947153510433 $TESTER_BOT_TOKEN
 
 # production:
