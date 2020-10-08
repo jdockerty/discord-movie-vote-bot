@@ -10,8 +10,7 @@ test:
     - apt-get update -qy
     - pip install awscli
     - pip install -r requirements.txt
-    - export bot_environment=testing
-    - python bot_test.py -c $CHANNEL_ID $TARGET_BOT_ID $TESTER_BOT_TOKEN --run all
+    - bot_environment=testing python bot_test.py -c $CHANNEL_ID --run all $TARGET_BOT_ID $TESTER_BOT_TOKEN
 
 # production:
 #   stage: deploy
