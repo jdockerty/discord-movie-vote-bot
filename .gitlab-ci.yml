@@ -14,6 +14,7 @@ test:
     - export bot_environment=testing
     - python bot.py &
     - python bot_test.py --channel 720200786167988297 --run all $TARGET_BOT_ID $TESTER_BOT_TOKEN
+    - kill $!
 
 # production:
 #   stage: deploy
