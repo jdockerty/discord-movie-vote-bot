@@ -11,6 +11,11 @@ python3 -m venv <virtual_env_name>
 pip install -r requirements.txt
 ```
 
+or using the convenience provided in the `makefile` with 
+    
+    make install
+    source env/bin/activate
+
 ## Usage
 
 Requires an API key from Discord Developer Portal for usage inside of the `os.getenv['API_KEY']` and a channel ID for the appropriate channel messages are to be placed into, this is retrieved via `os.getenv['CHANNEL_ID']` as part of running the client.
