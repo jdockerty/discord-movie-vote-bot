@@ -16,9 +16,28 @@ async def test_movie_list_reply(interface):
 
     """
 
-    message = "!newvote test_movie1"
+    bot_command = "!newvote test_movie1"
 
-    await interface.assert_reply_contains(message, "1: test_movie1")
+    await interface.assert_reply_contains(bot_command, "1: test_movie1")
+
+@test_collector()
+async def test_movie_vote(interface):
+
+    bot_command = "!vote 1"
+
+    await interface.assert_reply_contains(bot_command, "test_movie1. Points: 3")
+
+
+
+
+
+
+@test_collector()
+async def test_cleanup(interface):
+    bot_command = "!endvote"
+
+    await interface.assert_reply_contains(bot_command, "wins with")
+
 
 if __name__ == "__main__":
     run_dtest_bot(sys.argv, test_collector)
