@@ -9,14 +9,18 @@ import yaml
 
 def load_config():
     bot_env = os.getenv("bot_environment")
+
     with open("config.yaml", 'r') as conf:
+
         try:
+
             info = yaml.safe_load(conf)
  
             return {
-                "key": info[bot_env]["API_KEY"],
+                "key": info["API_KEY"],
                 "channel": info[bot_env]["CHANNEL_ID"]
             }
+            
         except yaml.YAMLError as exc:
             print("Error loading YAML:", exc)
 
