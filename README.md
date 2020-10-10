@@ -29,4 +29,14 @@ Within the designated channel the commands are:
 
 ## Deployment
 
+**TODO: Update with some sort of blue/green etc.**
+
 A simple automated deployment is achieved through a t2.micro Ubuntu instance on AWS. The Python file requires the a `.env` file with the relevant `API_KEY` from the Discord Developer Portal to run the bot, this is stored in S3. The role to read objects is assigned to the instance upon creation in Terraform with the appropriate `user_data` script being executed to download the latest version of the GitHub repo and download the dependencies from the `requirements.txt` file, the bot is then run afterwards.
+
+## Testing
+
+Using GitLab CI for testing, this is activated via repository mirroring to GitLab and using a `.gitlab-ci.yml` file.
+
+The stages for this pipeline are:
+* **test:** run the `bot_test.py` file which runs another tester bot account that sends various messages into an isolated test channel, verifying the responses from the movie bot. 
+* **build-image:** this will build the latest image for the application, using the Dockerfile within `.docker/bot.yml`, and push it into AWS Elastic Container Registry (ECR). This occurs only on the master branch and uses the docker-in-docker service from GitLab.
