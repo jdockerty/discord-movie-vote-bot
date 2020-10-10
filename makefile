@@ -1,5 +1,5 @@
 # Helper to upload latest configuration to S3 for local testing.
-upload-config:
+upload:
 	aws s3 cp config.yaml s3://movie-vote-bot-bucket/config.yaml
 
 
