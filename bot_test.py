@@ -1,11 +1,10 @@
-import asyncio
 import sys
-from distest import TestCollector
-from distest import run_interactive_bot, run_dtest_bot
-import os
+
 import yaml
+from distest import TestCollector, run_dtest_bot, run_interactive_bot
 
 test_collector = TestCollector()
+
 
 @test_collector()
 async def test_movie_list_reply(interface):
@@ -20,16 +19,13 @@ async def test_movie_list_reply(interface):
 
     await interface.assert_reply_contains(bot_command, "1: test_movie1")
 
+
 @test_collector()
 async def test_movie_vote(interface):
 
     bot_command = "!vote 1"
 
     await interface.assert_reply_contains(bot_command, "test_movie1. Points: 3")
-
-
-
-
 
 
 @test_collector()

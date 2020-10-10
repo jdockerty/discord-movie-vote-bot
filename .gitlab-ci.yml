@@ -1,7 +1,6 @@
 variables:
   DOCKER_TLS_CERTDIR: "/certs"
 
-
 stages:
   - test
   - build
@@ -21,19 +20,22 @@ test-bot:
     - python bot_test.py --channel 720200786167988297 --run all $TARGET_BOT_ID $TESTER_BOT_TOKEN
     - kill $!
 
-# Build an image and push to AWS Elastic Container Registry (ECR)
+# Build an image, only on the master branch, and push to AWS Elastic Container Registry (ECR)
 build-image:
   stage: build
   image: docker:19.03.12
   services:
     - docker:19.03.12-dind
   script:
-    - docker build -t discord-movie-bot:latest .docker/bot.yml
-    # - docker run my-image /script/to/run/tests
-    - docker tag discord-movie-bot:latest 268906218954.dkr.ecr.eu-west-2.amazonaws.com/discord-movie-bot:latest
-    - aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 268906218954.dkr.ecr.eu-west-2.amazonaws.com
-    - docker push 268906218954.dkr.ecr.eu-west-2.amazonaws.com/discord-movie-bot:latest
-
+    - apk update
+    - apk add python3 py-pip
+    - pip install awscli
+    - docker build -t discord-movie-bot:latest -f .docker/bot.yml .
+    - docker tag discord-movie-bot:latest $AWS_ECR_REPO/discord-movie-bot:latest
+    - aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin $AWS_ECR_REPO
+    - docker push $AWS_ECR_REPO/discord-movie-bot:latest
+  only:
+    - master
 # production:
 #   stage: deploy
 #   script:
