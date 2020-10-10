@@ -10,3 +10,11 @@ install:
 	source env/bin/activate; \
 	pip install -r requirements.txt; \
 	)
+
+# Install/upgrade black for formatting Python code
+get-format:
+	env/bin/pip install -U black
+
+# Run black to format code
+format: get-format
+	env/bin/black *.py
