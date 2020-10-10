@@ -11,10 +11,14 @@ install:
 	pip install -r requirements.txt; \
 	)
 
-# Install/upgrade black for formatting Python code
+# Install/upgrade formatting tools for Python code.
 get-format:
 	env/bin/pip install -U black
+	env/bin/pip install -U isort
+	env/bin/pip install -U autoflake
 
-# Run black to format code
+# Run formatting tools.
 format: get-format
 	env/bin/black *.py
+	env/bin/isort *.py
+	env/bin/autoflake --remove-unused-variables --in-place *.py
