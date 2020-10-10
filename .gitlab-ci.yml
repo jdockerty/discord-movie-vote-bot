@@ -1,8 +1,6 @@
 variables:
   DOCKER_TLS_CERTDIR: "/certs"
 
-before-script:
-  - apt-get update -qy
 stages:
   - test
   - build
@@ -13,6 +11,7 @@ test-bot:
   stage: test
   image: python:3.8
   script:
+    - apt-get update -qy
     - pip install awscli
     - aws s3 cp s3://movie-vote-bot-bucket/config.yaml .
     - pip install -r requirements.txt
@@ -28,7 +27,9 @@ build-image:
   services:
     - docker:19.03.12-dind
   script:
-    - apt-get install python3 python3-pip
+    - apk update
+    - apt-get install python3 py-pip
+    - pip install awscli
     - docker build -t discord-movie-bot:latest -f .docker/bot.yml .
     # - docker run my-image /script/to/run/tests
     - docker tag discord-movie-bot:latest 268906218954.dkr.ecr.eu-west-2.amazonaws.com/discord-movie-bot:latest
