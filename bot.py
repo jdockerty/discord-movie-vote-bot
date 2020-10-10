@@ -1,9 +1,7 @@
-import discord
 import os
+
+import discord
 import dotenv
-import asyncio
-import collections
-import operator
 import yaml
 
 

@@ -1,9 +1,7 @@
-import asyncio
 import sys
-from distest import TestCollector
-from distest import run_interactive_bot, run_dtest_bot
-import os
+
 import yaml
+from distest import TestCollector, run_dtest_bot, run_interactive_bot
 
 test_collector = TestCollector()
 
