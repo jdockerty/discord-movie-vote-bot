@@ -28,7 +28,7 @@ build-image:
   services:
     - docker:19.03.12-dind
   script:
-    - docker build -t discord-movie-bot:latest .docker/bot.yml
+    - docker build -t discord-movie-bot:latest -f .docker/bot.yml
     # - docker run my-image /script/to/run/tests
     - docker tag discord-movie-bot:latest 268906218954.dkr.ecr.eu-west-2.amazonaws.com/discord-movie-bot:latest
     - aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 268906218954.dkr.ecr.eu-west-2.amazonaws.com
