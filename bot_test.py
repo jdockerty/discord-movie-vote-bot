@@ -7,6 +7,7 @@ import yaml
 
 test_collector = TestCollector()
 
+
 @test_collector()
 async def test_movie_list_reply(interface):
     """
@@ -20,16 +21,13 @@ async def test_movie_list_reply(interface):
 
     await interface.assert_reply_contains(bot_command, "1: test_movie1")
 
+
 @test_collector()
 async def test_movie_vote(interface):
 
     bot_command = "!vote 1"
 
     await interface.assert_reply_contains(bot_command, "test_movie1. Points: 3")
-
-
-
-
 
 
 @test_collector()
