@@ -36,9 +36,3 @@ build-image:
     - docker push $AWS_ECR_REPO/discord-movie-bot:latest
   only:
     - master
-# production:
-#   stage: deploy
-#   script:
-#     - apt-get update -qy
-#   only:
-#     - master
