@@ -28,7 +28,7 @@ build-image:
     - docker:19.03.12-dind
   script:
     - apk update
-    - apt-get install python3 py-pip
+    - apk add python3 py-pip
     - pip install awscli
     - docker build -t discord-movie-bot:latest -f .docker/bot.yml .
     # - docker run my-image /script/to/run/tests
