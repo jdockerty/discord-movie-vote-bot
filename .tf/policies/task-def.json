@@ -1,0 +1,26 @@
+[
+    {
+      "name": "discord_movie_bot",
+      "image": "268906218954.dkr.ecr.eu-west-2.amazonaws.com/discord-movie-bot:testing-latest",
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-region": "eu-west-2",
+          "awslogs-stream-prefix": "discord-movie-bot",
+          "awslogs-group": "awslogs-discord-movie-vote-bot"
+        }
+      },
+      "cpu": 256,
+      "ulimits": [
+        {
+          "name": "core",
+          "softLimit": 512,
+          "hardLimit": 512
+        }
+      ],
+      "mountPoints": [],
+      "memory": 512,
+      "volumesFrom": []
+    }
+  ]

@@ -31,7 +31,7 @@ Within the designated channel the commands are:
 
 **TODO: Update with some sort of blue/green etc.**
 
-A simple automated deployment is achieved through a t2.micro Ubuntu instance on AWS. The Python file requires the a `.env` file with the relevant `API_KEY` from the Discord Developer Portal to run the bot, this is stored in S3. The role to read objects is assigned to the instance upon creation in Terraform with the appropriate `user_data` script being executed to download the latest version of the GitHub repo and download the dependencies from the `requirements.txt` file, the bot is then run afterwards.
+At present, this is deployed using AWS Fargate, executing a single service for the container. Logs are pushed into CloudWatch for simplicity.
 
 ## Testing
 

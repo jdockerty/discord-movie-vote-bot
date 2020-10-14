@@ -6,3 +6,8 @@ env/
 
 # Ignore config file.
 config.yaml
+
+# Ignore terraform files
+.terraform/ 
+terraform.tfstate
+terraform.tfstate.backup
