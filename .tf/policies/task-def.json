@@ -1,7 +1,7 @@
 [
     {
       "name": "discord_movie_bot",
-      "image": "268906218954.dkr.ecr.eu-west-2.amazonaws.com/discord-movie-bot:latest",
+      "image": "268906218954.dkr.ecr.eu-west-2.amazonaws.com/discord-movie-bot:testing-latest",
       "essential": true,
       "logConfiguration": {
         "logDriver": "awslogs",
@@ -14,7 +14,7 @@
       "cpu": 256,
       "ulimits": [
         {
-          "name": "task_limits",
+          "name": "core",
           "softLimit": 512,
           "hardLimit": 512
         }
