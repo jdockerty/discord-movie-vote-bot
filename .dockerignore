@@ -4,3 +4,4 @@ env/
 .dockerignore
 *.md
 docker-compose.yml
+makefile
