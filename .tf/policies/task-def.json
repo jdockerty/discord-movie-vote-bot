@@ -12,19 +12,9 @@
         }
       },
       "cpu": 256,
-      "environment": [
-        {
-          "name": "NODE_ENV",
-          "value": "testing"
-        },
-        {
-          "name": "PORT",
-          "value": "3000"
-        }
-      ],
       "ulimits": [
         {
-          "name": "nofile",
+          "name": "task_limits",
           "softLimit": 512,
           "hardLimit": 512
         }
