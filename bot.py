@@ -6,9 +6,16 @@ import yaml
 
 
 def load_config():
+
+    config_map = {
+        "testing" : "/app/config.yaml",
+        "production": "/app/config.yaml",
+        "local" : "config.yaml"
+    }
+    
     bot_env = os.getenv("bot_environment")
 
-    with open("config.yaml", "r") as conf:
+    with open(config_map[bot_env], "r") as conf:
 
         try:
 
