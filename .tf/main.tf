@@ -68,6 +68,6 @@ resource "aws_cloudwatch_log_group" "cw_logs" {
 
   tags = {
     Environment = "testing"
-    Application = "hive_hr"
+    Application = "discord_movie_vote_bot"
   }
 }
