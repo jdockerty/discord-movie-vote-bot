@@ -7,7 +7,7 @@ variables:
 stages:
   - test
   - build
-  - deploy
+  # - deploy
 
 # Test the running bot using the Python test file provided.
 test-bot:
@@ -41,10 +41,9 @@ build-image:
     - master
 
 
-deployment:
-  stage: deploy
-  include:
-    - template: AWS/Deploy-ECS.gitlab-ci.yml
+include:
+  - template: AWS/Deploy-ECS.gitlab-ci.yml
+
   
   # image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   # script:
