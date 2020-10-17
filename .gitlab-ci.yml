@@ -46,4 +46,5 @@ deployment:
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   script:
     - container_definition=`cat .tf/policies/task-def.json`
-    - aws register-task-definition --family $CI_AWS_ECS_TASK_DEFINITION --container-definitions $CI_AWS_ECS_TASK_DEFINITION
+    - aws ecs register-task-definition --family $CI_AWS_ECS_TASK_DEFINITION --container-definitions $container_definition
+    - aws ecs update-service --cluster-name $CI_AWS_ECS_CLUSTER --service $CI_AWS_ECS_SERVICE --task-definition $CI_AWS_ECS_TASK_DEFINITION:latest
