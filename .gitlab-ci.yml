@@ -40,9 +40,9 @@ build-image:
   only:
     - master
 
-deployment:
-  include:
-    - template: AWS/Deploy-ECS.gitlab-ci.yml
+
+include:
+  - template: AWS/Deploy-ECS.gitlab-ci.yml
 
   
   # image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
