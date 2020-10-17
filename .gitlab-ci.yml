@@ -1,10 +1,13 @@
 variables:
   DOCKER_TLS_CERTDIR: "/certs"
+  CI_AWS_ECS_CLUSTER: discord_movie_bot_fg
+  CI_AWS_ECS_SERVICE: bot_service
+  CI_AWS_ECS_TASK_DEFINITION: discord_movie_bot_task
 
 stages:
   - test
   - build
-  # - deploy
+  - deploy
 
 # Test the running bot using the Python test file provided.
 test-bot:
@@ -36,3 +39,11 @@ build-image:
     - docker push $AWS_ECR_REPO/discord-movie-bot:latest
   only:
     - master
+
+
+deployment:
+  stage: deploy
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  script:
+    - container_definition=`cat .tf/policies/task-def.json`
+    - aws register-task-definition --family $CI_AWS_ECS_TASK_DEFINITION --container-definitions $container_definition
