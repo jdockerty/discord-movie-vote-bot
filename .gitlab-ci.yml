@@ -51,4 +51,4 @@ fargate-deployment:
     - TASK_DEFINITION=$(aws ecs describe-task-definition --task-definition "${CI_AWS_ECS_TASK_DEFINITION}" --region "${REGION}")
     - NEW_CONTAINER_DEFINTIION=$(echo ${TASK_DEFINITION} | jq '.taskDefinition.containerDefinitions[0]')
     - aws ecs register-task-definition --family "${CI_AWS_ECS_TASK_DEFINITION}" --container-definitions "${NEW_CONTAINER_DEFINTIION}" --region "${REGION}"
-    - aws ecs update-service --cluster "${CI_AWS_ECS_CLUSTER}" --service "${CI_AWS_ECS_SERVICE}" --task-definition "${CI_AWS_ECS_TASK_DEFINITION}:latest"
+    - aws ecs update-service --cluster "${CI_AWS_ECS_CLUSTER}" --service "${CI_AWS_ECS_SERVICE}" --task-definition "${CI_AWS_ECS_TASK_DEFINITION}:latest --region "${REGION}"
