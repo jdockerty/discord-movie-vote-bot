@@ -49,6 +49,6 @@ fargate-deployment:
     REGION: eu-west-2
   script:
     - TASK_DEFINITION=$(aws ecs describe-task-definition --task-definition "${CI_AWS_ECS_TASK_DEFINITION}" --region "${REGION}")
-    - NEW_CONTAINER_DEFINTIION=$(echo ${TASK_DEFINITION} | jq --arg IMAGE "${AWS_ECR_REPO}:latest" '.taskDefinition.containerDefinitions[0].image = ${IMAGE} | .taskDefinition.containerDefinitions[0]')
+    - NEW_CONTAINER_DEFINTIION=$(echo ${TASK_DEFINITION} | jq '.taskDefinition.containerDefinitions[0]')
     - aws ecs register-task-definition --family ${CI_AWS_ECS_TASK_DEFINITION} --container-definitions ${NEW_CONTAINER_DEFINTIION} --region "${REGION}"
     - aws ecs update-service --cluster-name $CI_AWS_ECS_CLUSTER --service $CI_AWS_ECS_SERVICE --task-definition $CI_AWS_ECS_TASK_DEFINITION:latest
