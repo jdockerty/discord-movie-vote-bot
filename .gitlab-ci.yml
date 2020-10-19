@@ -19,7 +19,7 @@ test-bot:
     - export bot_environment=testing
     - python bot.py &
     - python bot_test.py --channel 720200786167988297 --run all $TARGET_BOT_ID $TESTER_BOT_TOKEN
-    - kill $!
+    # - kill $!
 
 # Build an image, only on the master branch, and push to AWS Elastic Container Registry (ECR)
 build-image:
