@@ -22,5 +22,10 @@
       "mountPoints": [],
       "memory": 512,
       "volumesFrom": []
+    },
+    {
+      "compatibilities" : [
+        "FARGATE"
+      ]
     }
   ]
