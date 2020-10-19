@@ -21,11 +21,7 @@
       ],
       "mountPoints": [],
       "memory": 512,
-      "volumesFrom": []
-    },
-    {
-      "compatibilities" : [
-        "FARGATE"
-      ]
+      "volumesFrom": [],
+      "compatibilities" : ["FARGATE"]
     }
   ]
