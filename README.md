@@ -29,6 +29,8 @@ Within the designated channel the commands are:
 
 ## Testing
 
+*TODO: Tests running in pipeline are inconsistent, look into a way to make this consistent. Maybe having slight delay before reading bot response?*
+
 Using GitLab CI for testing, this is activated via repository mirroring to GitLab and using a `.gitlab-ci.yml` file.
 
 The stages for this pipeline are:
