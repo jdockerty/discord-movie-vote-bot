@@ -10,6 +10,7 @@ def load_config():
     config_map = {
         "testing" : "/app/config.yaml",
         "production": "/app/config.yaml",
+        "ci-tests": "config.yaml",
         "local" : "config.yaml"
     }
     

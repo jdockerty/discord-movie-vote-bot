@@ -1,10 +1,11 @@
 variables:
   DOCKER_TLS_CERTDIR: "/certs"
 
+
 stages:
   - test
   - build
-  # - deploy
+  - deploy
 
 # Test the running bot using the Python test file provided.
 test-bot:
@@ -15,10 +16,9 @@ test-bot:
     - pip install awscli
     - aws s3 cp s3://movie-vote-bot-bucket/config.yaml .
     - pip install -r requirements.txt
-    - export bot_environment=testing
+    - export bot_environment=ci-tests
     - python bot.py &
     - python bot_test.py --channel 720200786167988297 --run all $TARGET_BOT_ID $TESTER_BOT_TOKEN
-    - kill $!
 
 # Build an image, only on the master branch, and push to AWS Elastic Container Registry (ECR)
 build-image:
@@ -32,7 +32,31 @@ build-image:
     - pip install awscli
     - docker build -t discord-movie-bot:latest -f .docker/bot.yml .
     - docker tag discord-movie-bot:latest $AWS_ECR_REPO/discord-movie-bot:latest
-    - aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin $AWS_ECR_REPO
+    - $(aws ecr get-login --no-include-email --region eu-west-2)
     - docker push $AWS_ECR_REPO/discord-movie-bot:latest
+  only:
+    - master
+
+
+fargate-deployment:
+  stage: deploy
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-ecs:latest
+  variables:
+    CI_AWS_ECS_CLUSTER: discord_movie_bot_fg
+    CI_AWS_ECS_SERVICE: bot_service
+    CI_AWS_ECS_TASK_DEFINITION: discord_movie_bot_task
+    REGION: eu-west-2
+  script:
+    - TASK_DEFINITION=$(aws ecs describe-task-definition --task-definition "${CI_AWS_ECS_TASK_DEFINITION}" --region "${REGION}")
+    - NEW_CONTAINER_DEFINTIION=$(echo ${TASK_DEFINITION} | jq '.taskDefinition.containerDefinitions[0]')
+    - aws ecs register-task-definition 
+        --family "${CI_AWS_ECS_TASK_DEFINITION}" 
+        --requires-compatibilities "FARGATE" 
+        --region "${REGION}" 
+        --cli-input-json file://.tf/policies/task-def.json
+    - aws ecs update-service --cluster "${CI_AWS_ECS_CLUSTER}" 
+        --service "${CI_AWS_ECS_SERVICE}" 
+        --task-definition "${CI_AWS_ECS_TASK_DEFINITION}" 
+        --region "${REGION}"
   only:
     - master
