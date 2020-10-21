@@ -27,12 +27,6 @@ Within the designated channel the commands are:
 * `!changevote X Y Z` someone can change their vote if it has already been cast, reusing `!vote` would stop them duplicating the vote.
 * `!endvote` will end the vote casting and write the movie with the highest number of points into the channel.
 
-## Deployment
-
-**TODO: Update with some sort of blue/green etc.**
-
-At present, this is deployed using AWS Fargate, executing a single service for the container. Logs are pushed into CloudWatch for simplicity.
-
 ## Testing
 
 Using GitLab CI for testing, this is activated via repository mirroring to GitLab and using a `.gitlab-ci.yml` file.
@@ -40,3 +34,11 @@ Using GitLab CI for testing, this is activated via repository mirroring to GitLa
 The stages for this pipeline are:
 * **test:** run the `bot_test.py` file which runs another tester bot account that sends various messages into an isolated test channel, verifying the responses from the movie bot. 
 * **build-image:** this will build the latest image for the application, using the Dockerfile within `.docker/bot.yml`, and push it into AWS Elastic Container Registry (ECR). This occurs only on the master branch and uses the docker-in-docker service from GitLab.
+
+## Deployment
+
+**TODO: Update with some sort of blue/green etc.**
+
+At present, this is deployed using AWS Fargate, executing a single service for the container.
+
+The deployment is achieved, after initially being setup through Terraform with `terraform apply` inside of the `.tf` directory, with a couple of ECS-related AWS CLI commands. These create a new task definition and update the running service that was created in Terraform, the latest task definition is then used on the running service to update to the latest image which was built in the `build-image` stage of the pipeline.
