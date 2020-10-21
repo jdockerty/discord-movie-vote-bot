@@ -2,7 +2,7 @@
   "networkMode": "awsvpc",
   "requiresCompatibilities" : ["FARGATE"],
   "executionRoleArn": "arn:aws:iam::268906218954:role/ecs-testing-execution-roleg",
-  "cpu": 256,
+  "cpu": "256",
   "containerDefinitions": [{
   "name": "discord_movie_bot",
   "image": "268906218954.dkr.ecr.eu-west-2.amazonaws.com/discord-movie-bot:testing-latest",
