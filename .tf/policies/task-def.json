@@ -14,7 +14,7 @@
       "awslogs-group": "awslogs-discord-movie-vote-bot"
     }
   },
-  "cpu": 1,
+  "cpu": 512,
   "ulimits": [
     {
       "name": "core",
