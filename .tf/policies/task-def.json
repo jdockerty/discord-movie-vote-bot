@@ -1,6 +1,6 @@
 {
   "networkMode": "awsvpc",
-  "compatibilities" : ["FARGATE"],
+  "requiresCompatibilities" : ["FARGATE"],
   "containerDefinitions": [{
   "name": "discord_movie_bot",
   "image": "268906218954.dkr.ecr.eu-west-2.amazonaws.com/discord-movie-bot:testing-latest",
