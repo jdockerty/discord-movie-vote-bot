@@ -49,7 +49,6 @@ fargate-deployment:
   script:
     - TASK_DEFINITION=$(aws ecs describe-task-definition --task-definition "${CI_AWS_ECS_TASK_DEFINITION}" --region "${REGION}")
     - NEW_CONTAINER_DEFINTIION=$(echo ${TASK_DEFINITION} | jq '.taskDefinition.containerDefinitions[0]')
-    # - LATEST_REVISION_NUM=$(echo ${TASK_DEFINITION} | jq '.taskDefinition.revision')
     - aws ecs register-task-definition 
         --family "${CI_AWS_ECS_TASK_DEFINITION}" 
         --requires-compatibilities "FARGATE" 
@@ -59,3 +58,5 @@ fargate-deployment:
         --service "${CI_AWS_ECS_SERVICE}" 
         --task-definition "${CI_AWS_ECS_TASK_DEFINITION}" 
         --region "${REGION}"
+  only:
+    - master
