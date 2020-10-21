@@ -1,4 +1,5 @@
 {
+  "containerDefinitions": [{
   "name": "discord_movie_bot",
   "image": "268906218954.dkr.ecr.eu-west-2.amazonaws.com/discord-movie-bot:testing-latest",
   "essential": true,
@@ -23,4 +24,5 @@
   "memory": 512,
   "volumesFrom": [],
   "compatibilities" : ["FARGATE"]
+  }]
 }
