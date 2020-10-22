@@ -76,15 +76,14 @@ class MyClient(discord.Client):
     async def new_vote(self, message):
 
         if "Admin" in [role.name for role in message.author.roles]:
-            movies = message.content.replace("!newvote ", "").split(", ")
+            movies = message.content.replace("!newvote ", "").split(",")
             for i, movie in enumerate(movies, start=1):
                 self.votes[i] = {"Movie Name": movie, "Vote Count": 0}
 
             movie_string = ""
-            i = 1
-            for movie in self.votes.values():
-                movie_string += f"{i}: {movie['Movie Name']}\n"
-                i += 1
+            
+            for index, movie in enumerate(self.votes.values(), start=1):
+                movie_string += f"{index}: {movie['Movie Name']}\n"
 
             await self.channel_message(
                 f"Use `!vote X Y Z` to place your votes\nChanges to votes are done by using `!changevote X Y Z`\n Movies to vote on: \n {movie_string}"
