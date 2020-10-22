@@ -129,7 +129,7 @@ class MyClient(discord.Client):
 
                 elif self.check_key_error(choices):
                     await self.channel_message(
-                        f"{message.author.mention}, you're a cunt :) ."
+                        f"{message.author.mention}, you cannot vote for something outside of the list."
                     )
                     return
 
