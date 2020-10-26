@@ -209,7 +209,8 @@ class MyClient(discord.Client):
 
     async def __end_test(self, message):
         if message.author.id == 763492591303655434 or message.author.id == 187697230767980545:
-            await self.channel_message("Closing...")
+            white_check_mark_unicode_character = "✅"
+            await message.add_reaction(white_check_mark_unicode_character)
             await self.close()
 
     # Wrapper function for sending a message into the relevant channel, this is always the same designated channel e.g. #movie-voting
