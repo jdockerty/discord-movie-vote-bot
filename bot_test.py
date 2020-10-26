@@ -29,11 +29,16 @@ async def test_movie_vote(interface):
 
 
 @test_collector()
-async def test_cleanup(interface):
+async def test_finish_voting(interface):
     bot_command = "!endvote"
 
     await interface.assert_reply_contains(bot_command, "wins with")
 
+@test_collector()
+async def test_close_bot(interface):
+    bot_command = "!endtest"
+
+    await interface.assert_reply_contains(bot_command, "Closing...")
 
 if __name__ == "__main__":
     run_dtest_bot(sys.argv, test_collector)
