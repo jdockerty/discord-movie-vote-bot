@@ -52,6 +52,9 @@ class MyClient(discord.Client):
             elif message.content.startswith("!changevote"):
                 await self.change_vote(message)
 
+            elif message.content == "!endtest":
+                await self.__end_test(message)
+
             elif "!endvote" in message.content:
 
                 if "Admin" in [role.name for role in message.author.roles]:
@@ -202,6 +205,12 @@ class MyClient(discord.Client):
         await self.channel_message(f"{message.author.mention} vote changed.")
         await self.standings_display()
         print("Vote changed: ", message_author)
+
+
+    async def __end_test(self, message):
+        if message.author.id == 763492591303655434 or message.author.id == 187697230767980545:
+            await self.channel_message("Closing...")
+            await self.close()
 
     # Wrapper function for sending a message into the relevant channel, this is always the same designated channel e.g. #movie-voting
     async def channel_message(self, message):
