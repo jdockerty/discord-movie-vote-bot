@@ -8,12 +8,12 @@ import yaml
 def load_config():
 
     config_map = {
-        "testing" : "/app/config.yaml",
+        "testing": "/app/config.yaml",
         "production": "/app/config.yaml",
         "ci-tests": "config.yaml",
-        "local" : "config.yaml"
+        "local": "config.yaml",
     }
-    
+
     bot_env = os.getenv("bot_environment")
 
     with open(config_map[bot_env], "r") as conf:
@@ -84,7 +84,7 @@ class MyClient(discord.Client):
                 self.votes[i] = {"Movie Name": movie, "Vote Count": 0}
 
             movie_string = ""
-            
+
             for index, movie in enumerate(self.votes.values(), start=1):
                 movie_string += f"{index}: {movie['Movie Name']}\n"
 
@@ -206,9 +206,11 @@ class MyClient(discord.Client):
         await self.standings_display()
         print("Vote changed: ", message_author)
 
-
     async def __end_test(self, message):
-        if message.author.id == 763492591303655434 or message.author.id == 187697230767980545:
+        if (
+            message.author.id == 763492591303655434
+            or message.author.id == 187697230767980545
+        ):
             white_check_mark_unicode_character = "✅"
             await message.add_reaction(white_check_mark_unicode_character)
             await self.close()
