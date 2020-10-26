@@ -36,9 +36,8 @@ async def test_finish_voting(interface):
 
 @test_collector()
 async def test_close_bot(interface):
-    bot_command = "!endtest"
-
-    await interface.assert_reply_contains(bot_command, "Closing...")
+    white_check_mark_unicode_character = "✅"
+    await interface.assert_reaction_equals("!endtest", white_check_mark_unicode_character) 
 
 if __name__ == "__main__":
     run_dtest_bot(sys.argv, test_collector)
