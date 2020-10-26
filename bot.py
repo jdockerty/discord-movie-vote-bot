@@ -52,6 +52,9 @@ class MyClient(discord.Client):
             elif message.content.startswith("!changevote"):
                 await self.change_vote(message)
 
+            elif message.content == "!endtest":
+                await self.__end_test(message)
+
             elif "!endvote" in message.content:
 
                 if "Admin" in [role.name for role in message.author.roles]:
@@ -76,15 +79,14 @@ class MyClient(discord.Client):
     async def new_vote(self, message):
 
         if "Admin" in [role.name for role in message.author.roles]:
-            movies = message.content.replace("!newvote ", "").split(", ")
+            movies = message.content.replace("!newvote ", "").split(",")
             for i, movie in enumerate(movies, start=1):
                 self.votes[i] = {"Movie Name": movie, "Vote Count": 0}
 
             movie_string = ""
-            i = 1
-            for movie in self.votes.values():
-                movie_string += f"{i}: {movie['Movie Name']}\n"
-                i += 1
+            
+            for index, movie in enumerate(self.votes.values(), start=1):
+                movie_string += f"{index}: {movie['Movie Name']}\n"
 
             await self.channel_message(
                 f"Use `!vote X Y Z` to place your votes\nChanges to votes are done by using `!changevote X Y Z`\n Movies to vote on: \n {movie_string}"
@@ -130,7 +132,7 @@ class MyClient(discord.Client):
 
                 elif self.check_key_error(choices):
                     await self.channel_message(
-                        f"{message.author.mention}, you're a cunt :) ."
+                        f"{message.author.mention}, you cannot vote for something outside of the list."
                     )
                     return
 
@@ -203,6 +205,13 @@ class MyClient(discord.Client):
         await self.channel_message(f"{message.author.mention} vote changed.")
         await self.standings_display()
         print("Vote changed: ", message_author)
+
+
+    async def __end_test(self, message):
+        if message.author.id == 763492591303655434 or message.author.id == 187697230767980545:
+            white_check_mark_unicode_character = "✅"
+            await message.add_reaction(white_check_mark_unicode_character)
+            await self.close()
 
     # Wrapper function for sending a message into the relevant channel, this is always the same designated channel e.g. #movie-voting
     async def channel_message(self, message):

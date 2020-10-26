@@ -7,7 +7,7 @@ data "aws_subnet_ids" "default" {
 }
 
 data "template_file" "discord_bot_app" {
-  template = file("policies/task-def.json")
+  template = file("policies/container-def.json")
   vars = {
     tag      = "latest"
     app_port = 3000

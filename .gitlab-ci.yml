@@ -18,7 +18,7 @@ test-bot:
     - pip install -r requirements.txt
     - export bot_environment=ci-tests
     - python bot.py &
-    - python bot_test.py --channel 720200786167988297 --run all $TARGET_BOT_ID $TESTER_BOT_TOKEN
+    - python bot_test.py --channel $CHANNEL_ID --run all $TARGET_BOT_ID $TESTER_BOT_TOKEN
 
 # Build an image, only on the master branch, and push to AWS Elastic Container Registry (ECR)
 build-image:
